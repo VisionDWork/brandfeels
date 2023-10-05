@@ -1,0 +1,178 @@
+body, html {
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    padding-block: 5rem;
+    background-color: black;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container h1 {
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+.container h1 span {
+    padding-bottom: 5px;
+    border-bottom: solid 2px #8c52ff;
+}
+
+.roleta-container {
+    position: relative;
+}
+
+.arrow {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 15px solid grey;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg);
+    z-index: 2;
+}
+
+.roulette-container {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    border: 3px solid white;
+    margin-bottom: 2rem;
+}
+
+.pizza-slice {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #ddd;
+    clip-path: polygon(100% 50%, 0% 0%, 0% 37%);
+    transform-origin: 100% 50%;
+    transform: rotate(var(--rotate));
+}
+
+
+.pizza-slice:nth-child(2n) {
+    background-color: #8c52ff;
+}
+
+.pizza-slice span {
+    position: absolute;
+    left: 40%;  /* adjust as needed */
+    top: 33%;
+    transform: translate(-50%, -50%) rotate(25deg);
+    color: #000;
+    font-weight: bold;
+    font-size: .7rem;
+}
+
+.premio {
+    background-color: #ffd04c !important;
+}
+
+.middle-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6.5rem;
+    height: 6.5rem;
+    border-radius: 100vw;
+    background-color: #000;
+    transform: translate(-50%, -50%);
+}
+
+
+.input-section, .premio-section, .buttons-section, .estatisticas-section {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-section p {
+    display: block;
+    text-transform: uppercase;
+    width: 20rem;
+    font-size: .8rem;
+}
+
+.input-section span {
+    color: #8c52ff;
+}
+
+.input-section input {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    margin-top: 2rem;
+    background-color: transparent;
+    border-radius: 100vw;
+    width: 14rem;
+    color: white;
+}
+
+.input-section input::placeholder {
+    font-size: .9rem;
+} 
+
+.premio-section span {
+    display: block;
+    font-size: 24px;
+    color: #333;
+    padding: 10px 0;
+}
+
+#btn {
+    background-color: transparent;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 100vw;
+    cursor: pointer;
+    margin-right: 10px;
+    border: solid 1px white;
+    transition: background-color 0.3s;
+    position: relative;
+    top: -2rem;
+    font-size: .7rem;
+}
+
+#btn:hover {
+    background-color: #8c52ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .container {
+        width: 100vw;
+    }
+
+    #btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
