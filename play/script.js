@@ -36,23 +36,26 @@ async function rotateRoulette() {
         alert("Invalid phone number!");
         return ;
     }
-
     // TODO - Save phone number
     let flag_tentativas = false;
     let flag_gameTime = false;
-
     await game.doc("gameTime").get().then((doc) => {
         flag_gameTime = doc.data().isOn;
     });
-
     if(!flag_gameTime){
-        alert("Não é possível jogar agora");
+        alert("Espera pelo próximo \"SCAN TIME\"");
         location.reload();
         return;
     }
+    let selectedSlice = Math.floor(Math.random() * 12) + 1;
+    let angle = getAngleToRotate(selectedSlice);
+    currentRotation += angle;
+    let prizeName = getPrizeMessage(selectedSlice);
+
     await player.doc(sanitizedNumber).get().then((doc) => {
         const agora = Math.floor(Date.now()/1000);
         if(doc.exists){
+                let p = doc.data().plays;
             console.log(doc.data());
             if ((agora - doc.data().time) < 900){
                 flag_tentativas = true;
@@ -60,10 +63,30 @@ async function rotateRoulette() {
                 return;
             }
             if(doc.data().plays < 4){
-                player.doc(sanitizedNumber).set({
-                    plays: doc.data().plays + 1,
-                    time: agora,
-                })
+                switch(p){
+                case 1: {
+                    player.doc(sanitizedNumber).update({
+                        plays: p + 1,
+                        time: agora,
+                        play2: prizeName,
+                    })
+                }break;
+                case 2: {
+                    player.doc(sanitizedNumber).update({
+                        plays: p + 1,
+                        time: agora,
+                        play3: prizeName,
+                    })
+                }break;
+                case 3: {
+                    player.doc(sanitizedNumber).update({
+                        plays: p + 1,
+                        time: agora,
+                        play4: prizeName,
+                    })
+                }break;
+                default: {}
+                }
             }else{
                 flag_tentativas = true;
                 alert("Já fizeste 4 tentativas");
@@ -73,6 +96,7 @@ async function rotateRoulette() {
             player.doc(sanitizedNumber).set({
                 plays: 1,
                 time: agora,
+                play1: prizeName,
             })
         }
         }
@@ -85,10 +109,6 @@ async function rotateRoulette() {
 
     btn.disabled = true; // Disable the button
 
-    // Randomly pick a slice number (1 to 12)
-    let selectedSlice = Math.floor(Math.random() * 12) + 1;
-    let angle = getAngleToRotate(selectedSlice);
-    currentRotation += angle;
 
     let roleta = document.querySelector('.roulette-container');
     roleta.style.transition = 'transform 3000ms ease';
@@ -104,7 +124,6 @@ async function rotateRoulette() {
 
 function getPrizeMessage(slice) {
     const sliceElement = document.querySelector(`#slice-${slice} span`);
-
     if (sliceElement) {
         return sliceElement.textContent;
     } else {
