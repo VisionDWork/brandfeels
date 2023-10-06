@@ -59,7 +59,7 @@ async function rotateRoulette() {
             console.log(doc.data());
             if ((agora - doc.data().time) < 900){
                 flag_tentativas = true;
-                alert("Já jogaste esta vez")
+                alert("Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"")
                 return;
             }
             if(doc.data().plays < 4){
