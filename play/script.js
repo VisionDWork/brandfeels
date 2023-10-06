@@ -6,7 +6,7 @@ const btn = document.getElementById("btn");
 btn.addEventListener('click', rotateRoulette);
 
 function isValidPhoneNumber(number) {
-    const validPrefixes = ['96', '93', '91'];
+    const validPrefixes = ['96', '93', '91', '92'];
     const prefix = number.substring(0, 2);
     return validPrefixes.includes(prefix) && number.length === 9;
 }
