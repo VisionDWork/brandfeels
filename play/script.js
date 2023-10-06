@@ -27,7 +27,7 @@ function rotateRoulette() {
         return ;
     }
 
-    console.log(sanitizedNumber);
+    // TODO - Save phone number
 
     btn.disabled = true; // Disable the button
 
@@ -39,8 +39,8 @@ function rotateRoulette() {
     let roleta = document.querySelector('.roulette-container');
     roleta.style.transition = 'transform 3000ms ease';
     roleta.style.transform = `rotate(${currentRotation}deg)`;
-
     setTimeout(() => {
+        // TODO - Send message
         alert(getPrizeMessage(selectedSlice));
         location.reload();
     }, 3100);
@@ -51,13 +51,13 @@ function getPrizeMessage(slice) {
     if (sliceElement) {
         return sliceElement.textContent;
     } else {
-        return 'Unknown prize';  // Default message if the slice is not found
+        return 'Unknown prize';
     }
 }
 
 
 function getAngleToRotate(slice) {
-    const spins = 4 ;  // Change this to adjust the number of full spins
+    const spins = 4 ; 
     const fullRotation = 360;
     let baseAngle;
 
@@ -84,3 +84,4 @@ function getAngleToRotate(slice) {
 function getRandomAngle(min, max) {
     return Math.random() * (max - min) + min;
 }
+
