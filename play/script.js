@@ -1,3 +1,12 @@
+firebase.initializeApp({
+    apiKey: "AIzaSyAdf3AguODka_zAeePsWj68qrErbzxGz3E",
+    authDomain: "brandfeels-cf508.firebaseapp.com",
+    projectId: "brandfeels-cf508",
+});
+
+const db = firebase.firestore();
+var player = db.collection("player");
+var game = db.collection("game");
 let currentRotation = 0;
 let isSpinning = false;
 
@@ -12,7 +21,7 @@ function isValidPhoneNumber(number) {
 }
 
 
-function rotateRoulette() {
+async function rotateRoulette() {
     if (isSpinning) return;
 
     let phone = document.querySelector('#telefone').value;
@@ -28,6 +37,50 @@ function rotateRoulette() {
     }
 
     // TODO - Save phone number
+    let flag_tentativas = false;
+    let flag_gameTime = false;
+
+    await game.doc("gameTime").get().then((doc) => {
+        flag_gameTime = doc.data().isOn;
+    });
+
+    if(!flag_gameTime){
+        alert("Não é possível jogar agora");
+        location.reload();
+        return;
+    }
+    await player.doc(sanitizedNumber).get().then((doc) => {
+        const agora = Math.floor(Date.now()/1000);
+        if(doc.exists){
+            console.log(doc.data());
+            if ((agora - doc.data().time) < 900){
+                flag_tentativas = true;
+                alert("Já jogaste esta vez")
+                return;
+            }
+            if(doc.data().plays < 4){
+                player.doc(sanitizedNumber).set({
+                    plays: doc.data().plays + 1,
+                    time: agora,
+                })
+            }else{
+                flag_tentativas = true;
+                alert("Já fizeste 4 tentativas");
+                return;
+            }
+        }else{
+            player.doc(sanitizedNumber).set({
+                plays: 1,
+                time: agora,
+            })
+        }
+        }
+    )
+    if(flag_tentativas){
+        location.reload();
+        return;
+    }
+
 
     btn.disabled = true; // Disable the button
 
@@ -44,6 +97,8 @@ function rotateRoulette() {
         alert(getPrizeMessage(selectedSlice));
         location.reload();
     }, 3100);
+
+
 }
 
 function getPrizeMessage(slice) {
@@ -85,3 +140,9 @@ function getAngleToRotate(slice) {
 function getRandomAngle(min, max) {
     return Math.random() * (max - min) + min;
 }
+
+
+// player.doc("926355972").set({
+//     plays: 2,
+// })
+                                  // );
