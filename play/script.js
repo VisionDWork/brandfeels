@@ -7,6 +7,7 @@ firebase.initializeApp({
 const db = firebase.firestore();
 var player = db.collection("player");
 var game = db.collection("game");
+var slices = db.collection("slices");
 let currentRotation = 0;
 let isSpinning = false;
 
@@ -142,7 +143,27 @@ function getRandomAngle(min, max) {
 }
 
 
-// player.doc("926355972").set({
-//     plays: 2,
-// })
-                                  // );
+async function preparePizza() {
+    let index = 1;
+    await slices.doc("slice_index").get().then((ind) => {
+        index = ind.data().index;
+    });
+
+    await slices.doc(index.toString()).get().then((doc) => {
+        let slice = doc.data();
+        document.getElementById("slice-1").innerHTML="<span>"+slice.s1+"</span>"
+        document.getElementById("slice-2").innerHTML="<span>"+slice.s2+"</span>"
+        document.getElementById("slice-3").innerHTML="<span>"+slice.s3+"</span>"
+        document.getElementById("slice-4").innerHTML="<span>"+slice.s4+"</span>"
+        document.getElementById("slice-5").innerHTML="<span>"+slice.s5+"</span>"
+        document.getElementById("slice-6").innerHTML="<span>"+slice.s6+"</span>"
+        document.getElementById("slice-7").innerHTML="<span>"+slice.s7+"</span>"
+        document.getElementById("slice-8").innerHTML="<span>"+slice.s8+"</span>"
+        document.getElementById("slice-9").innerHTML="<span>"+slice.s9+"</span>"
+        document.getElementById("slice-10").innerHTML="<span>"+slice.s10+" </span>"
+        document.getElementById("slice-11").innerHTML="<span>"+slice.s11+"</span>"
+        document.getElementById("slice-12").innerHTML="<span>"+slice.s12+"</span>"
+    })
+}
+
+window.onload = preparePizza;
