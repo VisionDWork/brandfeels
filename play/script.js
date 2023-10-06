@@ -48,6 +48,7 @@ function rotateRoulette() {
 
 function getPrizeMessage(slice) {
     const sliceElement = document.querySelector(`#slice-${slice} span`);
+
     if (sliceElement) {
         return sliceElement.textContent;
     } else {
@@ -84,4 +85,3 @@ function getAngleToRotate(slice) {
 function getRandomAngle(min, max) {
     return Math.random() * (max - min) + min;
 }
-

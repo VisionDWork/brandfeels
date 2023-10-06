@@ -6,9 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./play/styles.css">
     <link rel="icon" href="./imgs/icon-w-bg.jpg" type="image/x-icon">
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore-compat.js"></script>
     <title>Brand Feels</title>
 </head>
 <body>
+    <script>
+     firebase.initializeApp({
+         apiKey: "AIzaSyAdf3AguODka_zAeePsWj68qrErbzxGz3E",
+         authDomain: "brandfeels-cf508.firebaseapp.com",
+         projectId: "brandfeels-cf508",
+     });
+     const db = firebase.firestore();
+
+     var player = db.collection("player");
+     player.doc("teste").set({
+         number: "91111111",
+         plays: 1,
+     })
+     console.log(player);
+    </script>
     <div class="container">
 
         <img id="logo" src="./imgs/logo.png" alt="logo">
