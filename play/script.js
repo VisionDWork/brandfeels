@@ -120,10 +120,8 @@ async function rotateRoulette() {
     roleta.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
         let message = getPrizeMessage(selectedSlice);
-        if (message === "Upsss...") {
-            alert(message);
-        } else if (!challenge) {
-            alert("Take a SCREENSHOT\n\n" + message)
+        if (!challenge && message !== "Upsss...") {
+            alert("Take a SCREENSHOT\n\nGanhaste: " + message)
         } else {
             alert(message);
         }
