@@ -219,7 +219,7 @@ async function prepareGame() {
         let slice = doc.data();
         if (random <= slice.r1Prob) {
             return (3); // 3 - maior premio
-        } else if (random <= slice.r2Prob) {
+        } else if (random <= slice.r1Prob + slice.r2Prob) {
             let randomSlice = Math.floor((Math.random() * 5) + 1);
             switch(randomSlice) {
                 case 1: selectedSlice = 1; break;
