@@ -20,12 +20,29 @@ const btn = document.getElementById("btn");
 
 btn.addEventListener('click', rotateRoulette);
 
+var modal = document.getElementById('modal');
+
+var confirmBtn = document.getElementById('confirmBtn');
+
+function displayModal(title, message) {
+    return new Promise((resolve, reject) => {
+        modal.querySelector('#modal-title').textContent = title;
+        modal.querySelector('#modal-text').textContent = message;
+
+        confirmBtn.onclick = function() {
+            modal.style.display = "none";
+            resolve(false);
+        };
+
+        modal.style.display = "block";
+    });
+}
+
 function isValidPhoneNumber(number) {
     const validPrefixes = ['96', '93', '91', '92'];
     const prefix = number.substring(0, 2);
     return validPrefixes.includes(prefix) && number.length === 9;
 }
-
 
 async function rotateRoulette() {
     if (isSpinning) return;
@@ -33,6 +50,7 @@ async function rotateRoulette() {
     let angle = getAngleToRotate(selectedSlice);
     currentRotation += angle;
     let prizeName = getPrizeMessage(selectedSlice);
+    console.log(selectedSlice, prizeName);
 
     if (!challenge) {
         let phone = document.querySelector('#telefone').value;
@@ -42,7 +60,7 @@ async function rotateRoulette() {
         }
 
         if (!isValidPhoneNumber(sanitizedNumber)) {
-            alert("Invalid phone number!");
+            displayModal("Aviso", "Número inválido!");
             return ;
         }
         let flag_tentativas = false;
@@ -51,8 +69,7 @@ async function rotateRoulette() {
             flag_gameTime = doc.data().isOn;
         });
         if(!flag_gameTime){
-            alert("Espera pelo próximo \"SCAN TIME\"");
-            location.reload();
+            displayModal("Aviso", "Espera pelo próximo \"SCAN TIME\"");
             return;
         }
         await player.doc(sanitizedNumber).get().then((doc) => {
@@ -61,7 +78,7 @@ async function rotateRoulette() {
                 let p = doc.data().plays;
                 if ((agora - doc.data().time) < 900){
                     flag_tentativas = true;
-                    alert("Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"")
+                    displayModal("Aviso", "Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"");
                     return;
                 }
                 if(doc.data().plays < 4){
@@ -91,7 +108,7 @@ async function rotateRoulette() {
                     }
                 }else{
                     flag_tentativas = true;
-                    alert("Já fizeste 4 tentativas");
+                    displayModal("Aviso", "Já fizeste 4 tentativas");
                     return;
                 }
             }else{
@@ -121,18 +138,20 @@ async function rotateRoulette() {
     roleta.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
         if (!challenge && prizeName !== "Upsss...") {
-            alert("Ganhaste: " + prizeName + "\n\n" + winMessage)
+            displayModal("Parabéns!", "Ganhaste: " + prizeName + ", " + winMessage).then(res => {redirect()});
         } else {
-            alert(prizeName);
+            displayModal("Resultado:", prizeName).then(res => {redirect()});
         }
-        if (redirectLink === "" || challenge) {
-            location.reload();
-        } else {
-            location.replace(redirectLink);
-        }
+
     }, 3100);
+}
 
-
+function redirect() {
+    if (redirectLink === "" || challenge) {
+        location.reload();
+    } else {
+        location.replace(redirectLink);
+    }
 }
 
 function getPrizeMessage(slice) {
@@ -194,7 +213,7 @@ async function prepareGame() {
         document.getElementById("slice-7").innerHTML="<span>"+slice.r2+"</span>"
         document.getElementById("slice-8").innerHTML="<span>"+slice.r3+"</span>"
         document.getElementById("slice-9").innerHTML="<span>"+slice.r2+"</span>"
-        document.getElementById("slice-10").innerHTML="<span>"+slice.r3+" </span>"
+        document.getElementById("slice-10").innerHTML="<span>"+slice.r3+"</span>"
         document.getElementById("slice-11").innerHTML="<span>"+slice.r2+"</span>"
         document.getElementById("slice-12").innerHTML="<span>"+slice.r3+"</span>"
     })
