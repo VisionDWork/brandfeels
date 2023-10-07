@@ -203,7 +203,7 @@ async function prepareGame() {
 
     await slices.doc(index.toString()).get().then((doc) => {
         let slice = doc.data();
-        winMessage = doc.data().winMessage;
+        winMessage = doc.data().winMessage || "";
         document.getElementById("slice-1").innerHTML="<span>"+slice.r2+"</span>"
         document.getElementById("slice-2").innerHTML="<span>"+slice.r3+"</span>"
         document.getElementById("slice-3").innerHTML="<span>"+slice.r1+"</span>"

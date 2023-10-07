@@ -226,11 +226,14 @@ a:hover {
 
 /* Modal Content */
 .modal-content {
-    width: 20rem;
-    height: 20rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16rem;
+    height: 16rem;
     color: white;
     background-color: #8c52ff;
-    margin: 15% auto;
     border: 1px solid #888;
     padding: 20px;
     display: flex;
