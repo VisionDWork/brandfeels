@@ -28,9 +28,7 @@ function isValidPhoneNumber(number) {
 async function rotateRoulette() {
     if (isSpinning) return;
 
-    // REMOVE
-    // let phone = document.querySelector('#telefone').value;
-    let phone = "963687458";
+    let phone = document.querySelector('#telefone').value;
     let sanitizedNumber = phone.replace(/\s+/g, '');
     if (sanitizedNumber.startsWith('+351')) {
         sanitizedNumber = sanitizedNumber.substring(4);
@@ -45,12 +43,11 @@ async function rotateRoulette() {
     await game.doc("gameTime").get().then((doc) => {
         flag_gameTime = doc.data().isOn;
     });
-    // REMOVE
-    // if(!flag_gameTime){
-    //     alert("Espera pelo próximo \"SCAN TIME\"");
-    //     location.reload();
-    //     return;
-    // }
+    if(!flag_gameTime){
+        alert("Espera pelo próximo \"SCAN TIME\"");
+        location.reload();
+        return;
+    }
     let angle = getAngleToRotate(selectedSlice);
     currentRotation += angle;
     let prizeName = getPrizeMessage(selectedSlice);
@@ -96,13 +93,12 @@ async function rotateRoulette() {
                 return;
             }
         }else{
-            // REMOVE
             // Save phone number
-            // player.doc(sanitizedNumber).set({
-            //     plays: 1,
-            //     time: agora,
-            //     play1: prizeName,
-            // })
+            player.doc(sanitizedNumber).set({
+                plays: 1,
+                time: agora,
+                play1: prizeName,
+            })
         }
         }
     )
@@ -110,9 +106,7 @@ async function rotateRoulette() {
         if (redirectLink === "") {
             location.reload();
         } else {
-            // REMOVE
-            location.reload();
-            // location.replace(redirectLink);
+            location.replace(redirectLink);
         }
         return;
     }
@@ -127,9 +121,7 @@ async function rotateRoulette() {
         if (redirectLink === "") {
             location.reload();
         } else {
-            // REMOVE
-            location.reload();
-            // location.replace(redirectLink);
+            location.replace(redirectLink);
         }
     }, 3100);
 
