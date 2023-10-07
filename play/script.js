@@ -122,7 +122,7 @@ async function rotateRoulette() {
         let message = getPrizeMessage(selectedSlice);
         if (message === "Upsss...") {
             alert(message);
-        } else if (challenge) {
+        } else if (!challenge) {
             alert("Take a SCREENSHOT\n\n" + message)
         }
         if (redirectLink === "" || challenge) {
