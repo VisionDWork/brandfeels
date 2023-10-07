@@ -59,7 +59,7 @@ async function rotateRoulette() {
             const agora = Math.floor(Date.now()/1000);
             if(doc.exists){
                 let p = doc.data().plays;
-                if (!challenges && (agora - doc.data().time) < 900){
+                if ((agora - doc.data().time) < 900){
                     flag_tentativas = true;
                     alert("Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"")
                     return;
