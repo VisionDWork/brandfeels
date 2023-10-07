@@ -170,7 +170,7 @@ async function prepareGame() {
 
     // Prepare pizza
 
-    let index = 1;
+    let index = "bebida";
     await slices.doc("slice_index").get().then((ind) => {
         index = ind.data().index;
     });
