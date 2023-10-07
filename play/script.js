@@ -13,6 +13,7 @@ let currentRotation = 0;
 let isSpinning = false;
 let redirectLink = "";
 let selectedSlice;
+let challenge = false;
 
 const btn = document.getElementById("btn");
 
@@ -28,97 +29,98 @@ function isValidPhoneNumber(number) {
 async function rotateRoulette() {
     if (isSpinning) return;
 
-    let phone = document.querySelector('#telefone').value;
-    let sanitizedNumber = phone.replace(/\s+/g, '');
-    if (sanitizedNumber.startsWith('+351')) {
-        sanitizedNumber = sanitizedNumber.substring(4);
-    }
-
-    if (!isValidPhoneNumber(sanitizedNumber)) {
-        alert("Invalid phone number!");
-        return ;
-    }
-    let flag_tentativas = false;
-    let flag_gameTime = false;
-    await game.doc("gameTime").get().then((doc) => {
-        flag_gameTime = doc.data().isOn;
-    });
-    if(!flag_gameTime){
-        alert("Espera pelo próximo \"SCAN TIME\"");
-        location.reload();
-        return;
-    }
     let angle = getAngleToRotate(selectedSlice);
     currentRotation += angle;
     let prizeName = getPrizeMessage(selectedSlice);
 
-    await player.doc(sanitizedNumber).get().then((doc) => {
-        const agora = Math.floor(Date.now()/1000);
-        if(doc.exists){
-            let p = doc.data().plays;
-            console.log(doc.data());
-            if ((agora - doc.data().time) < 900){
-                flag_tentativas = true;
-                alert("Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"")
-                return;
-            }
-            if(doc.data().plays < 4){
-                switch(p){
-                case 1: {
-                    player.doc(sanitizedNumber).update({
-                        plays: p + 1,
-                        time: agora,
-                        play2: prizeName,
-                    })
-                }break;
-                case 2: {
-                    player.doc(sanitizedNumber).update({
-                        plays: p + 1,
-                        time: agora,
-                        play3: prizeName,
-                    })
-                }break;
-                case 3: {
-                    player.doc(sanitizedNumber).update({
-                        plays: p + 1,
-                        time: agora,
-                        play4: prizeName,
-                    })
-                }break;
-                default: {}
+    if (!challenge) {
+        let phone = document.querySelector('#telefone').value;
+        let sanitizedNumber = phone.replace(/\s+/g, '');
+        if (sanitizedNumber.startsWith('+351')) {
+            sanitizedNumber = sanitizedNumber.substring(4);
+        }
+
+        if (!challenges && !isValidPhoneNumber(sanitizedNumber)) {
+            alert("Invalid phone number!");
+            return ;
+        }
+        let flag_tentativas = false;
+        let flag_gameTime = false;
+        await game.doc("gameTime").get().then((doc) => {
+            flag_gameTime = doc.data().isOn;
+        });
+        if(!flag_gameTime){
+            alert("Espera pelo próximo \"SCAN TIME\"");
+            location.reload();
+            return;
+        }
+        await player.doc(sanitizedNumber).get().then((doc) => {
+            const agora = Math.floor(Date.now()/1000);
+            if(doc.exists){
+                let p = doc.data().plays;
+                if (!challenges && (agora - doc.data().time) < 900){
+                    flag_tentativas = true;
+                    alert("Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"")
+                    return;
+                }
+                if(doc.data().plays < 4){
+                    switch(p){
+                    case 1: {
+                        player.doc(sanitizedNumber).update({
+                            plays: p + 1,
+                            time: agora,
+                            play2: prizeName,
+                        })
+                    }break;
+                    case 2: {
+                        player.doc(sanitizedNumber).update({
+                            plays: p + 1,
+                            time: agora,
+                            play3: prizeName,
+                        })
+                    }break;
+                    case 3: {
+                        player.doc(sanitizedNumber).update({
+                            plays: p + 1,
+                            time: agora,
+                            play4: prizeName,
+                        })
+                    }break;
+                    default: {}
+                    }
+                }else{
+                    flag_tentativas = true;
+                    alert("Já fizeste 4 tentativas");
+                    return;
                 }
             }else{
-                flag_tentativas = true;
-                alert("Já fizeste 4 tentativas");
-                return;
+                // Save phone number
+                player.doc(sanitizedNumber).set({
+                    plays: 1,
+                    time: agora,
+                    play1: prizeName,
+                })
             }
-        }else{
-            // Save phone number
-            player.doc(sanitizedNumber).set({
-                plays: 1,
-                time: agora,
-                play1: prizeName,
-            })
+            }
+        )
+        if(flag_tentativas){
+            if (redirectLink === "") {
+                location.reload();
+            } else {
+                location.replace(redirectLink);
+            }
+            return;
         }
-        }
-    )
-    if(flag_tentativas){
-        if (redirectLink === "") {
-            location.reload();
-        } else {
-            location.replace(redirectLink);
-        }
-        return;
-    }
 
-    btn.disabled = true; // Disable the button
+        btn.disabled = true; // Disable the button
+    }
 
     let roleta = document.querySelector('.roulette-container');
     roleta.style.transition = 'transform 3000ms ease';
     roleta.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
         alert(getPrizeMessage(selectedSlice));
-        if (redirectLink === "") {
+        if (redirectLink === "" || challenge) {
             location.reload();
         } else {
             location.replace(redirectLink);
@@ -213,7 +215,16 @@ async function prepareGame() {
     index = 1;
     await slices.doc("slice_index").get().then((ind) => {
         index = ind.data().index;
+        challenge = ind.data().challenges;
     });
+    
+    // Check if it is challenge to change title
+    if (challenge) {
+        document.querySelector('#title span').innerHTML = "Make challenges";
+        document.querySelector('.input-section').style.display = "none";
+        document.querySelector('.premio-section').style.display = "none";
+        document.querySelector('#btn').style.marginTop = "3rem";
+    } 
 
     await slices.doc(index.toString()).get().then((doc) => {
         let slice = doc.data();
@@ -242,24 +253,6 @@ async function prepareGame() {
             }
         }
     })
-
-    // Save phone numbers
-    // let ids = [];
-
-    // // Fetch all documents from the player collection
-    // await player.get().then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //         ids.push(doc.id);
-    //     });
-    // });
-
-    // // Create a downloadable txt file
-    // let blob = new Blob([ids.join('\n')], { type: 'text/plain' });
-    // let link = document.createElement('a');
-    // link.href = window.URL.createObjectURL(blob);
-    // link.download = 'documentIDs.txt';
-    // link.click();
-
     
     btn.disabled = false;
 }
