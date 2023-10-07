@@ -15,9 +15,9 @@ let redirectLink = "";
 let selectedSlice = "";
 let challenge = false;
 let winMessage = "";
+let roleta = "bebida";
 
 const btn = document.getElementById("btn");
-
 btn.addEventListener('click', rotateRoulette);
 
 var modal = document.getElementById('modal');
@@ -31,6 +31,9 @@ function displayModal(title, message) {
 
         confirmBtn.onclick = function() {
             modal.style.display = "none";
+            if (title !== "Aviso") {
+                redirect();
+            }
             resolve(false);
         };
 
@@ -46,11 +49,11 @@ function isValidPhoneNumber(number) {
 
 async function rotateRoulette() {
     if (isSpinning) return;
+    isSpinning = true;
 
     let angle = getAngleToRotate(selectedSlice);
     currentRotation += angle;
     let prizeName = getPrizeMessage(selectedSlice);
-    console.log(selectedSlice, prizeName);
 
     if (!challenge) {
         let phone = document.querySelector('#telefone').value;
@@ -61,6 +64,7 @@ async function rotateRoulette() {
 
         if (!isValidPhoneNumber(sanitizedNumber)) {
             displayModal("Aviso", "Número inválido!");
+            isSpinning = false;
             return ;
         }
         let flag_tentativas = false;
@@ -70,15 +74,17 @@ async function rotateRoulette() {
         });
         if(!flag_gameTime){
             displayModal("Aviso", "Espera pelo próximo \"SCAN TIME\"");
+            isSpinning = false;
             return;
         }
-        await player.doc(sanitizedNumber).get().then((doc) => {
+        await player.doc(sanitizedNumber).get().then(async (doc) => {
             const agora = Math.floor(Date.now()/1000);
             if(doc.exists){
                 let p = doc.data().plays;
                 if ((agora - doc.data().time) < 900){
                     flag_tentativas = true;
-                    displayModal("Aviso", "Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"");
+                    await displayModal("Aviso", "Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"");
+                    isSpinning = false;
                     return;
                 }
                 if(doc.data().plays < 4){
@@ -109,6 +115,7 @@ async function rotateRoulette() {
                 }else{
                     flag_tentativas = true;
                     displayModal("Aviso", "Já fizeste 4 tentativas");
+                    isSpinning = false;
                     return;
                 }
             }else{
@@ -122,27 +129,23 @@ async function rotateRoulette() {
             }
         )
         if(flag_tentativas){
-            if (redirectLink === "") {
-                location.reload();
-            } else {
-                location.replace(redirectLink);
-            }
+            redirect();
+            isSpinning = false;
             return;
         }
 
         btn.disabled = true; // Disable the button
     }
-
     let roleta = document.querySelector('.roulette-container');
     roleta.style.transition = 'transform 3000ms ease';
     roleta.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
         if (!challenge && prizeName !== "Upsss...") {
-            displayModal("Parabéns!", "Ganhaste: " + prizeName + ", " + winMessage).then(res => {redirect()});
+            displayModal("Parabéns!", "Ganhaste: " + prizeName + ", " + winMessage);
         } else {
-            displayModal("Resultado:", prizeName).then(res => {redirect()});
+            displayModal("Resultado:", prizeName);
         }
-
+        isSpinning = false;
     }, 3100);
 }
 
@@ -196,12 +199,12 @@ async function prepareGame() {
 
     // Prepare pizza
 
-    let index = "bebida";
     await slices.doc("slice_index").get().then((ind) => {
-        index = ind.data().index;
+        roleta = ind.data().index;
+        challenge = ind.data().challenges;
     });
 
-    await slices.doc(index.toString()).get().then((doc) => {
+    await slices.doc(roleta.toString()).get().then((doc) => {
         let slice = doc.data();
         winMessage = doc.data().winMessage || "";
         document.getElementById("slice-1").innerHTML="<span>"+slice.r2+"</span>"
@@ -232,16 +235,10 @@ async function prepareGame() {
         redirectLink = data.link;
     });
 
+    
     // Prepare winner slice
     
     let random = Math.floor(Math.random() * 100) + 1;
-    // Get reward based on probability in database
-    
-    index = "bebida";
-    await slices.doc("slice_index").get().then((ind) => {
-        index = ind.data().index;
-        challenge = ind.data().challenges;
-    });
     
     // Check if it is challenge to change title
     if (challenge) {
@@ -252,7 +249,7 @@ async function prepareGame() {
         document.querySelector('#btn').style.marginTop = "3rem";
     } 
 
-    await slices.doc(index.toString()).get().then((doc) => {
+    await slices.doc(roleta.toString()).get().then((doc) => {
         let slice = doc.data();
         if (random <= slice.r1Prob) {
             selectedSlice =  3; // 3 - maior premio
