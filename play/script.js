@@ -243,6 +243,24 @@ async function prepareGame() {
         }
     })
 
+    // Save phone numbers
+    // let ids = [];
+
+    // // Fetch all documents from the player collection
+    // await player.get().then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //         ids.push(doc.id);
+    //     });
+    // });
+
+    // // Create a downloadable txt file
+    // let blob = new Blob([ids.join('\n')], { type: 'text/plain' });
+    // let link = document.createElement('a');
+    // link.href = window.URL.createObjectURL(blob);
+    // link.download = 'documentIDs.txt';
+    // link.click();
+
+    
     btn.disabled = false;
 }
 
