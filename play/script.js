@@ -153,7 +153,8 @@ function redirect() {
     if (redirectLink === "" || challenge) {
         location.reload();
     } else {
-        location.replace(redirectLink);
+        // location.replace(redirectLink);
+        location.reload();
     }
 }
 
