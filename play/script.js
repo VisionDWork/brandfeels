@@ -227,7 +227,8 @@ async function prepareGame() {
     
     // Check if it is challenge to change title
     if (challenge) {
-        document.querySelector('#title span').innerHTML = "Make challenges";
+        document.querySelector('#title1').innerHTML = "Spin for";
+        document.querySelector('#title2').innerHTML = "a challenge";
         document.querySelector('.input-section').style.display = "none";
         document.querySelector('.premio-section').style.display = "none";
         document.querySelector('#btn').style.marginTop = "3rem";
