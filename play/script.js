@@ -119,7 +119,12 @@ async function rotateRoulette() {
     roleta.style.transition = 'transform 3000ms ease';
     roleta.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
-        alert(getPrizeMessage(selectedSlice));
+        let message = getPrizeMessage(selectedSlice);
+        if (message === "Upsss...") {
+            alert(message);
+        } else if (challenge) {
+            alert("Take a SCREENSHOT\n\n" + message)
+        }
         if (redirectLink === "" || challenge) {
             location.reload();
         } else {
