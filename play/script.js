@@ -14,6 +14,7 @@ let isSpinning = false;
 let redirectLink = "";
 let selectedSlice;
 let challenge = false;
+let winMessage = "";
 
 const btn = document.getElementById("btn");
 
@@ -40,7 +41,7 @@ async function rotateRoulette() {
             sanitizedNumber = sanitizedNumber.substring(4);
         }
 
-        if (!challenges && !isValidPhoneNumber(sanitizedNumber)) {
+        if (!isValidPhoneNumber(sanitizedNumber)) {
             alert("Invalid phone number!");
             return ;
         }
@@ -121,11 +122,10 @@ async function rotateRoulette() {
     setTimeout(() => {
         let message = getPrizeMessage(selectedSlice);
         if (!challenge && message !== "Upsss...") {
-            alert("Take a SCREENSHOT\n\nGanhaste: " + message)
+            alert("Ganhaste: " + message + "\n\n" + winMessage)
         } else {
             alert(message);
         }
-
         if (redirectLink === "" || challenge) {
             location.reload();
         } else {
@@ -185,6 +185,7 @@ async function prepareGame() {
 
     await slices.doc(index.toString()).get().then((doc) => {
         let slice = doc.data();
+        winMessage = doc.data().winMessage;
         document.getElementById("slice-1").innerHTML="<span>"+slice.r2+"</span>"
         document.getElementById("slice-2").innerHTML="<span>"+slice.r3+"</span>"
         document.getElementById("slice-3").innerHTML="<span>"+slice.r1+"</span>"
@@ -218,7 +219,7 @@ async function prepareGame() {
     let random = Math.floor(Math.random() * 100) + 1;
     // Get reward based on probability in database
     
-    index = 1;
+    index = "bebida";
     await slices.doc("slice_index").get().then((ind) => {
         index = ind.data().index;
         challenge = ind.data().challenges;
