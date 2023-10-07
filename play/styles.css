@@ -261,6 +261,22 @@ a:hover {
     color: #8c52ff;
 }
 
+#instagram-container {
+    border: solid 1px white;
+    border-radius: 100vw;
+    padding: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+#instagram {
+    filter: invert(1);
+    width: 1rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
 
@@ -270,6 +286,5 @@ a:hover {
 
     #btn {
         width: 100%;
-        margin-bottom: 10px;
     }
 }
