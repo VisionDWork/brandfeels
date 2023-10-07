@@ -12,7 +12,7 @@ var slices = db.collection("slices");
 let currentRotation = 0;
 let isSpinning = false;
 let redirectLink = "";
-let selectedSlice;
+let selectedSlice = "";
 let challenge = false;
 let winMessage = "";
 
@@ -120,11 +120,10 @@ async function rotateRoulette() {
     roleta.style.transition = 'transform 3000ms ease';
     roleta.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
-        let message = getPrizeMessage(selectedSlice);
-        if (!challenge && message !== "Upsss...") {
-            alert("Ganhaste: " + message + "\n\n" + winMessage)
+        if (!challenge && prizeName !== "Upsss...") {
+            alert("Ganhaste: " + prizeName + "\n\n" + winMessage)
         } else {
-            alert(message);
+            alert(prizeName);
         }
         if (redirectLink === "" || challenge) {
             location.reload();
@@ -237,7 +236,7 @@ async function prepareGame() {
     await slices.doc(index.toString()).get().then((doc) => {
         let slice = doc.data();
         if (random <= slice.r1Prob) {
-            return (3); // 3 - maior premio
+            selectedSlice =  3; // 3 - maior premio
         } else if (random <= slice.r1Prob + slice.r2Prob) {
             let randomSlice = Math.floor((Math.random() * 5) + 1);
             switch(randomSlice) {
