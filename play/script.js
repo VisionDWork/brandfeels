@@ -5,11 +5,14 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
-var player = db.collection("player");
 var game = db.collection("game");
+var brand = db.collection("brands");
+var player = db.collection("player");
 var slices = db.collection("slices");
 let currentRotation = 0;
 let isSpinning = false;
+let redirectLink = "";
+let selectedSlice;
 
 const btn = document.getElementById("btn");
 
@@ -25,8 +28,9 @@ function isValidPhoneNumber(number) {
 async function rotateRoulette() {
     if (isSpinning) return;
 
-    let phone = document.querySelector('#telefone').value;
-    // Sanitize the phone number by removing spaces and checking for the +351 prefix
+    // REMOVE
+    // let phone = document.querySelector('#telefone').value;
+    let phone = "963687458";
     let sanitizedNumber = phone.replace(/\s+/g, '');
     if (sanitizedNumber.startsWith('+351')) {
         sanitizedNumber = sanitizedNumber.substring(4);
@@ -36,18 +40,17 @@ async function rotateRoulette() {
         alert("Invalid phone number!");
         return ;
     }
-    // TODO - Save phone number
     let flag_tentativas = false;
     let flag_gameTime = false;
     await game.doc("gameTime").get().then((doc) => {
         flag_gameTime = doc.data().isOn;
     });
-    if(!flag_gameTime){
-        alert("Espera pelo próximo \"SCAN TIME\"");
-        location.reload();
-        return;
-    }
-    let selectedSlice = Math.floor(Math.random() * 12) + 1;
+    // REMOVE
+    // if(!flag_gameTime){
+    //     alert("Espera pelo próximo \"SCAN TIME\"");
+    //     location.reload();
+    //     return;
+    // }
     let angle = getAngleToRotate(selectedSlice);
     currentRotation += angle;
     let prizeName = getPrizeMessage(selectedSlice);
@@ -55,7 +58,7 @@ async function rotateRoulette() {
     await player.doc(sanitizedNumber).get().then((doc) => {
         const agora = Math.floor(Date.now()/1000);
         if(doc.exists){
-                let p = doc.data().plays;
+            let p = doc.data().plays;
             console.log(doc.data());
             if ((agora - doc.data().time) < 900){
                 flag_tentativas = true;
@@ -93,30 +96,41 @@ async function rotateRoulette() {
                 return;
             }
         }else{
-            player.doc(sanitizedNumber).set({
-                plays: 1,
-                time: agora,
-                play1: prizeName,
-            })
+            // REMOVE
+            // Save phone number
+            // player.doc(sanitizedNumber).set({
+            //     plays: 1,
+            //     time: agora,
+            //     play1: prizeName,
+            // })
         }
         }
     )
     if(flag_tentativas){
-        location.reload();
+        if (redirectLink === "") {
+            location.reload();
+        } else {
+            // REMOVE
+            location.reload();
+            // location.replace(redirectLink);
+        }
         return;
     }
 
-
     btn.disabled = true; // Disable the button
-
 
     let roleta = document.querySelector('.roulette-container');
     roleta.style.transition = 'transform 3000ms ease';
     roleta.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
-        // TODO - Send message
         alert(getPrizeMessage(selectedSlice));
-        location.reload();
+        if (redirectLink === "") {
+            location.reload();
+        } else {
+            // REMOVE
+            location.reload();
+            // location.replace(redirectLink);
+        }
     }, 3100);
 
 
@@ -130,7 +144,6 @@ function getPrizeMessage(slice) {
         return 'Unknown prize';
     }
 }
-
 
 function getAngleToRotate(slice) {
     const spins = 4 ; 
@@ -156,13 +169,15 @@ function getAngleToRotate(slice) {
     return spins * fullRotation + baseAngle;
 }
 
-
 function getRandomAngle(min, max) {
     return Math.random() * (max - min) + min;
 }
 
 
-async function preparePizza() {
+async function prepareGame() {
+
+    // Prepare pizza
+
     let index = 1;
     await slices.doc("slice_index").get().then((ind) => {
         index = ind.data().index;
@@ -170,19 +185,73 @@ async function preparePizza() {
 
     await slices.doc(index.toString()).get().then((doc) => {
         let slice = doc.data();
-        document.getElementById("slice-1").innerHTML="<span>"+slice.s1+"</span>"
-        document.getElementById("slice-2").innerHTML="<span>"+slice.s2+"</span>"
-        document.getElementById("slice-3").innerHTML="<span>"+slice.s3+"</span>"
-        document.getElementById("slice-4").innerHTML="<span>"+slice.s4+"</span>"
-        document.getElementById("slice-5").innerHTML="<span>"+slice.s5+"</span>"
-        document.getElementById("slice-6").innerHTML="<span>"+slice.s6+"</span>"
-        document.getElementById("slice-7").innerHTML="<span>"+slice.s7+"</span>"
-        document.getElementById("slice-8").innerHTML="<span>"+slice.s8+"</span>"
-        document.getElementById("slice-9").innerHTML="<span>"+slice.s9+"</span>"
-        document.getElementById("slice-10").innerHTML="<span>"+slice.s10+" </span>"
-        document.getElementById("slice-11").innerHTML="<span>"+slice.s11+"</span>"
-        document.getElementById("slice-12").innerHTML="<span>"+slice.s12+"</span>"
+        document.getElementById("slice-1").innerHTML="<span>"+slice.r2+"</span>"
+        document.getElementById("slice-2").innerHTML="<span>"+slice.r3+"</span>"
+        document.getElementById("slice-3").innerHTML="<span>"+slice.r1+"</span>"
+        document.getElementById("slice-4").innerHTML="<span>"+slice.r3+"</span>"
+        document.getElementById("slice-5").innerHTML="<span>"+slice.r2+"</span>"
+        document.getElementById("slice-6").innerHTML="<span>"+slice.r3+"</span>"
+        document.getElementById("slice-7").innerHTML="<span>"+slice.r2+"</span>"
+        document.getElementById("slice-8").innerHTML="<span>"+slice.r3+"</span>"
+        document.getElementById("slice-9").innerHTML="<span>"+slice.r2+"</span>"
+        document.getElementById("slice-10").innerHTML="<span>"+slice.r3+" </span>"
+        document.getElementById("slice-11").innerHTML="<span>"+slice.r2+"</span>"
+        document.getElementById("slice-12").innerHTML="<span>"+slice.r3+"</span>"
     })
+
+    // Prepare Brand Logo and redirect link
+
+    let brandName = "brandfeels";
+    await brand.doc("brand").get().then((ind) => {
+        brandName = ind.data().name;
+    });
+
+    await brand.doc(brandName).get().then((doc) => {
+        let data = doc.data();
+        // Update brand logo
+        document.getElementById("logo").src = "./content/logos/" + data.logo;
+        redirectLink = data.link;
+    });
+
+    // Prepare winner slice
+    
+    let random = Math.floor(Math.random() * 100) + 1;
+    // Get reward based on probability in database
+    
+    index = 1;
+    await slices.doc("slice_index").get().then((ind) => {
+        index = ind.data().index;
+    });
+
+    await slices.doc(index.toString()).get().then((doc) => {
+        let slice = doc.data();
+        if (random <= slice.r1Prob) {
+            return (3); // 3 - maior premio
+        } else if (random <= slice.r2Prob) {
+            let randomSlice = Math.floor((Math.random() * 5) + 1);
+            switch(randomSlice) {
+                case 1: selectedSlice = 1; break;
+                case 2: selectedSlice = 5; break;
+                case 3: selectedSlice = 7; break;
+                case 4: selectedSlice = 9; break;
+                case 5: selectedSlice = 11; break;
+                default: selectedSlice = 1;
+            }
+        } else {
+            let randomSlice = Math.floor((Math.random() * 6) + 1);
+            switch(randomSlice) {
+                case 1: selectedSlice = 2; break;
+                case 2: selectedSlice = 4; break;
+                case 3: selectedSlice = 6; break;
+                case 4: selectedSlice = 8; break;
+                case 5: selectedSlice = 10; break;
+                case 6: selectedSlice = 12; break;
+                default: selectedSlice = 2;
+            }
+        }
+    })
+
+    btn.disabled = false;
 }
 
-window.onload = preparePizza;
+window.onload = prepareGame;

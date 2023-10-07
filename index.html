@@ -5,57 +5,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./play/styles.css">
-    <link rel="icon" href="./imgs/icon-w-bg.jpg" type="image/x-icon">
+    <link rel="icon" href="./content/logos/icon-w-bg.jpg" type="image/x-icon">
     <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore-compat.js"></script>
     <title>Brand Feels</title>
 </head>
 <body>
-    <script>
-    </script>
-    <div class="container">
 
-        <img id="logo" src="./imgs/logo.png" alt="logo">
-        <h1>SPIN TO <span>WIN REWARDS</span></h1>
-        
-        <div class="roleta-container">
-            <div class="arrow"></div>
-            <div class="roulette-container">
-                <div class="pizza-slice" id="slice-1" style="--rotate: 0deg;"><span>20% discount</span></div>
-                <div class="pizza-slice" id="slice-2" style="--rotate: 30deg;"><span>Upsss...</span></div>
-                <div class="pizza-slice premio" id="slice-3" style="--rotate: 60deg;"><span>Premium</span></div>
-                <div class="pizza-slice" id="slice-4" style="--rotate: 90deg;"><span>Upsss...</span></div>
-                <div class="pizza-slice" id="slice-5" style="--rotate: 120deg;"><span>20% discount</span></div>
-                <div class="pizza-slice" id="slice-6" style="--rotate: 150deg;"><span>Upsss...</span></div>
-                <div class="pizza-slice" id="slice-7" style="--rotate: 180deg;"><span>20% discount</span></div>
-                <div class="pizza-slice" id="slice-8" style="--rotate: 210deg;"><span>Upsss...</span></div>
-                <div class="pizza-slice" id="slice-9" style="--rotate: 240deg;"><span>20% discount</span></div>
-                <div class="pizza-slice" id="slice-10" style="--rotate: 270deg;"><span>Upsss...</span></div>
-                <div class="pizza-slice" id="slice-11" style="--rotate: 300deg;"><span>20% discount</span></div>
-                <div class="pizza-slice" id="slice-12" style="--rotate: 330deg;"><span>Upsss...</span></div>
-                <div class="middle-circle">
-                    <img src="./imgs/icon.png" alt="icon">
-                </div>
+    <div id="logo-container">
+        <img id="logo" src="./content/logos/brandfeels.png" alt="logo">
+    </div>
+    <h1>SPIN TO <span>WIN REWARDS</span></h1>
+    
+    <div class="roleta-container">
+        <div class="arrow"></div>
+        <div class="roulette-container">
+            <div class="pizza-slice" id="slice-1" style="--rotate: 0deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-2" style="--rotate: 30deg;"><span>Loading</span></div>
+            <div class="pizza-slice premio" id="slice-3" style="--rotate: 60deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-4" style="--rotate: 90deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-5" style="--rotate: 120deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-6" style="--rotate: 150deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-7" style="--rotate: 180deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-8" style="--rotate: 210deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-9" style="--rotate: 240deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-10" style="--rotate: 270deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-11" style="--rotate: 300deg;"><span>Loading</span></div>
+            <div class="pizza-slice" id="slice-12" style="--rotate: 330deg;"><span>Loading</span></div>
+            <div class="middle-circle">
+                <img src="./content/logos/icon.png" alt="icon">
             </div>
         </div>
-
-        
-        <div class="input-section">
-            <p><span>Preenche</span> abaixo e <span>concorre</span> a um dos nossos incríveis <span>prêmios</span>!</p>
-            <input type="text" id="telefone" placeholder="Phone Number">
-        </div>
-        
-        <div class="premio-section">
-            <span id="premio"></span>
-        </div>
-        
-        <div class="buttons-section">
-            <button id="btn" >TEST YOUR LUCK</button>
-        </div>
-
-        <p>Powered by <a href="https://visiond.pt">Vision D</a></p>
-
     </div>
+
+    
+    <div class="input-section">
+        <p><span>Preenche</span> abaixo e <span>concorre</span> a um dos nossos incríveis <span>prêmios</span>!</p>
+        <input type="text" id="telefone" placeholder="Phone Number">
+    </div>
+    
+    <div class="premio-section">
+        <span id="premio"></span>
+    </div>
+    
+    <div class="buttons-section">
+        <button id="btn" disabled>TEST YOUR LUCK</button>
+    </div>
+
+    <p>Powered by <a href="https://visiond.pt">Vision D</a></p>
+
     <script src="./play/script.js"></script>
 </body>
 
