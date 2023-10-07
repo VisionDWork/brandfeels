@@ -124,7 +124,10 @@ async function rotateRoulette() {
             alert(message);
         } else if (!challenge) {
             alert("Take a SCREENSHOT\n\n" + message)
+        } else {
+            alert(message);
         }
+
         if (redirectLink === "" || challenge) {
             location.reload();
         } else {
