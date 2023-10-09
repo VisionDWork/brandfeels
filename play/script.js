@@ -28,6 +28,7 @@ let selectedSliceIndex = 1;
 let angle = 0;
 // Mensagem de resultado do premio
 let winMessage = "";
+let winnerSlices = [];
 // Link de redirecionamento apos rodar
 let redirectLink = "";
 // Marca escolhida a ser apresentada
@@ -39,12 +40,18 @@ let slices;
 let slicesLen;
 // Numero total de fatias
 let totalSlices = 0;
+let prizeName = "";
+// Number of tries allowed per scan time
+let tries = 1;
+let minutesOfScanTime = 15;
 
 async function prepareGame() {
 
     // Get game stats
     await roletaGame.doc("stats").get().then((doc) => {
         flag_gameOn = doc.data().isOn;
+        tries = doc.data().tiesPerScanTime;
+        minutesOfScanTime = doc.data().minutesOfScanTime;
         brand_selected = doc.data().brandSelected;
         roleta_selected = doc.data().sliceSelected;
     });
@@ -52,6 +59,9 @@ async function prepareGame() {
     // Get info for slices
     await roletaGame.doc("slices").collection(roleta_selected).doc("info").get().then((ind) => {
         winMessage = ind.data().message;
+        if (ind.data().winnerSlices) {
+            winnerSlices = ind.data().winnerSlices;
+        }
         specialSlice = ind.data().specialSlice;
     });
 
@@ -177,6 +187,8 @@ async function rotateRoulette() {
     if (isSpinning) return;
     isSpinning = true;
 
+    prizeName = getPrizeMessage(slice_selected);
+
     if (flag_gameOn) {
         let phone = document.querySelector('#telefone').value;
         let sanitizedNumber = phone.replace(/\s+/g, '');
@@ -195,30 +207,30 @@ async function rotateRoulette() {
             if (doc.exists){
                 // Se o jogador existir na BD, atualizar os seus dados
                 let p = doc.data().plays;
-                if ((agora - doc.data().time) < 900){
+                if ((agora - doc.data().time) < minutesOfScanTime*60){
                     flag_tentativas = true;
                     await displayModal("Aviso", "Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"");
                     isSpinning = false;
                     return;
                 }
-                if (doc.data().plays < 4){
+                if (doc.data().plays < tries){
                     switch(p){
                     case 1: {
-                        player.doc(sanitizedNumber).update({
+                        roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
                             plays: p + 1,
                             time: agora,
                             play2: prizeName,
                         })
                     }break;
                     case 2: {
-                        player.doc(sanitizedNumber).update({
+                        roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
                             plays: p + 1,
                             time: agora,
                             play3: prizeName,
                         })
                     }break;
                     case 3: {
-                        player.doc(sanitizedNumber).update({
+                        roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
                             plays: p + 1,
                             time: agora,
                             play4: prizeName,
@@ -234,7 +246,7 @@ async function rotateRoulette() {
                 }
             } else {
                 // Se jogador nao existir na BD, criar novo jogador
-                player.doc(sanitizedNumber).set({
+                roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).set({
                     plays: 1,
                     time: agora,
                     play1: prizeName,
@@ -251,14 +263,13 @@ async function rotateRoulette() {
     }
 
     let angle = getAngleToRotate(slice_selected);
-    let prizeName = getPrizeMessage(slice_selected);
     currentRotation += angle;
     roletaElement.style.transition = 'transform 3000ms ease';
     roletaElement.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
-        // Se for premio e o premio nao for o "Upsss..." aparece "Parabens!"
+        // Se for jogo de premio e o premio for de vencedor aparece "Parabens!"
         // Caso contrario aparece apenas o "Resultado:"
-        if (flag_gameOn && prizeName !== "Upsss...") {
+        if (flag_gameOn && winnerSlices.includes(`s${selectedSliceIndex}`)) {
             displayModal("Parabéns!", "Ganhaste: " + prizeName + ", " + winMessage);
         } else if (!flag_gameOn) {
             displayModal("Resultado:", prizeName + ", " + winMessage);
