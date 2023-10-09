@@ -210,23 +210,24 @@ async function rotateRoulette() {
             if (doc.exists){
 
                 // Se o jogador existir na BD, atualizar os seus dados
+                let numberOfTries = doc.data().numberOfTries;
                 let numberOfPlays = doc.data().numberOfPlays;
                 let plays = doc.data().plays;
                 let newPlays = {
                     ...plays,
-                    ['play' + (numberOfPlays + 1).toString()]: [prizeName, false, readableDate] 
+                    ['play' + (numberOfTries + 1).toString()]: [prizeName, false, readableDate] 
                 };
                 
                 if ((agora - doc.data().firstTimePlayed) >= minutesOfScanTime*60) {
                     // Caso ja possa jogar novamente (passou x minutos deste a primeira vez que jogou)
                     roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
-                        numberOfPlays: 0,
+                        numberOfTries: 0,
                         firstTimePlayed: agora,
                     })
-                    numberOfPlays = 0;
+                    numberOfTries = 0;
                 }
                 // Caso ja tenha jogado x vezes
-                if (numberOfPlays >= tries){
+                if (numberOfTries >= tries){
                     flag_tentativas = true;
                     await displayModal("Aviso", `Espera ${minutesOfScanTime} minutos para jogares novamente!`);
                     isSpinning = false;
@@ -235,10 +236,12 @@ async function rotateRoulette() {
                 // Verificar se ganhou premio, pois se nao ganhar nao guardamos resultados
                 if (!winnerSlices.includes(`s${selectedSliceIndex}`)) {
                     roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
+                        numberOfTries: numberOfTries + 1,
                         numberOfPlays: numberOfPlays + 1,
                     })
                 } else {
                     roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
+                        numberOfTries: numberOfTries + 1,
                         numberOfPlays: numberOfPlays + 1,
                         plays: newPlays,
                     })
@@ -246,6 +249,7 @@ async function rotateRoulette() {
             } else {
                 // Se jogador nao existir na BD, criar novo jogador
                 roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).set({
+                    numberOfTries: 1,
                     numberOfPlays: 1,
                     firstTimePlayed: agora,
                     plays: {play1: [prizeName, false, readableDate]},
