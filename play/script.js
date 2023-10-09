@@ -368,13 +368,13 @@ await roletaGame.doc("slices").collection(name).doc("info").set({
 // Add brand 
 
 // brand name
-let brand = "";
+let brand = "festivalDoCaloiro";
 await roletaGame.doc("brands").collection(brand).doc(brand).set({
-    link: "",
-    logo: "",
+    link: "https://visiond.pt",
+    logo: "festivalDoCaloiro.png",
 })
-
 ======================== */ 
+
 
 }
 
