@@ -380,4 +380,5 @@ await roletaGame.doc("brands").collection(brand).doc(brand).set({
 
 // addToDatabase();
 
+
 window.onload = prepareGame;
