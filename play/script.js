@@ -50,7 +50,7 @@ async function prepareGame() {
     // Get game stats
     await roletaGame.doc("stats").get().then((doc) => {
         flag_gameOn = doc.data().isOn;
-        tries = doc.data().tiesPerScanTime;
+        tries = doc.data().triesPerScanTime;
         minutesOfScanTime = doc.data().minutesOfScanTime;
         brand_selected = doc.data().brandSelected;
         roleta_selected = doc.data().sliceSelected;
@@ -204,52 +204,51 @@ async function rotateRoulette() {
 
         await roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).get().then(async (doc) => {
             const agora = Math.floor(Date.now()/1000);
+            const date = new Date(agora * 1000);
+            const readableDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+
             if (doc.exists){
+
                 // Se o jogador existir na BD, atualizar os seus dados
-                let p = doc.data().plays;
-                if ((agora - doc.data().time) < minutesOfScanTime*60){
-                    flag_tentativas = true;
-                    await displayModal("Aviso", "Já jogaste esta vez, espera pelo próximo \"SCAN TIME\"");
-                    isSpinning = false;
-                    return;
+                let numberOfPlays = doc.data().numberOfPlays;
+                let plays = doc.data().plays;
+                let newPlays = {
+                    ...plays,
+                    ['play' + (numberOfPlays + 1).toString()]: [prizeName, false, readableDate] 
+                };
+                
+                if ((agora - doc.data().firstTimePlayed) >= minutesOfScanTime*60) {
+                    // Caso ja possa jogar novamente (passou x minutos deste a primeira vez que jogou)
+                    roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
+                        numberOfPlays: 0,
+                        firstTimePlayed: agora,
+                    })
+                    numberOfPlays = 0;
                 }
-                if (doc.data().plays < tries){
-                    switch(p){
-                    case 1: {
-                        roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
-                            plays: p + 1,
-                            time: agora,
-                            play2: prizeName,
-                        })
-                    }break;
-                    case 2: {
-                        roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
-                            plays: p + 1,
-                            time: agora,
-                            play3: prizeName,
-                        })
-                    }break;
-                    case 3: {
-                        roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
-                            plays: p + 1,
-                            time: agora,
-                            play4: prizeName,
-                        })
-                    }break;
-                    default: {}
-                    }
-                } else {
+                // Caso ja tenha jogado x vezes
+                if (numberOfPlays >= tries){
                     flag_tentativas = true;
-                    displayModal("Aviso", "Já fizeste 4 tentativas, espera pelo próximo \"SCAN TIME\"");
+                    await displayModal("Aviso", `Espera ${minutesOfScanTime} minutos para jogares novamente!`);
                     isSpinning = false;
-                    return;
+                    return ;
+                } 
+                // Verificar se ganhou premio, pois se nao ganhar nao guardamos resultados
+                if (!winnerSlices.includes(`s${selectedSliceIndex}`)) {
+                    roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
+                        numberOfPlays: numberOfPlays + 1,
+                    })
+                } else {
+                    roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).update({
+                        numberOfPlays: numberOfPlays + 1,
+                        plays: newPlays,
+                    })
                 }
             } else {
                 // Se jogador nao existir na BD, criar novo jogador
                 roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).set({
-                    plays: 1,
-                    time: agora,
-                    play1: prizeName,
+                    numberOfPlays: 1,
+                    firstTimePlayed: agora,
+                    plays: {play1: [prizeName, false, readableDate]},
                 })
             }
         })
@@ -267,6 +266,8 @@ async function rotateRoulette() {
     roletaElement.style.transition = 'transform 3000ms ease';
     roletaElement.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
+        // TODO
+        // send message to player
         // Se for jogo de premio e o premio for de vencedor aparece "Parabens!"
         // Caso contrario aparece apenas o "Resultado:"
         if (flag_gameOn && winnerSlices.includes(`s${selectedSliceIndex}`)) {
