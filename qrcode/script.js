@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let params = new URLSearchParams(window.location.search);
     let phone = params.get('phone');
     let value = params.get('value');
+    if (!phone || phone === "") {
+      return ;
+    }
     var qrcode = new QRCode(
       document.getElementById("qrcode"), 
       {
