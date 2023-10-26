@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Brand Feels">
+    <meta property="og:description" content="Playground">
+    <meta property="og:url" content="https://play.brandfeels.com">
+    <link rel="stylesheet" href="../geral.css">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="icon" href="../content/logos/icon-w-bg.jpg" type="image/x-icon">
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore-compat.js"></script>
+    <title>Brand Feels</title>
+</head>
+<body>
+
+    <img src="../content/imgs/halloween1.png" alt="spider" id="spider">
+    <img src="../content/imgs/halloween2.png" alt="head" id="head">
+    <img src="../content/imgs/halloween3.png" alt="net" id="net">
+    <img src="../content/imgs/halloween4.png" alt="net" id="net-two">
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+        <p id="modal-title"></p>
+        <p id="modal-text"></p>
+        <button id="confirmBtn">OK</button>
+        </div>
+    </div>
+
+    
+    <div id="logo-container">
+        <img id="logo" src="../content/logos/brandfeels.png" alt="logo">
+    </div>
+
+    <h1>SCREENSHOT ME</h1>
+    
+    <div id="qrcode">
+        
+    </div>
+
+    <div id="instagram-container">
+        <img onclick="window.location.replace('https://instagram.com/brandfeels_?igshid=MWZjMTM2ODFkZg==', '_blank')" id="instagram" src="../content/logos/instagram.png" alt="img">
+    </div>
+
+    <p id="credits">Powered by <a href="https://visiond.pt">Vision D</a></p>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>

@@ -10,6 +10,7 @@ firebase.initializeApp({
 const db = firebase.firestore();
 var roletaGame = db.collection("roleta");
 var roletaElement = document.querySelector('.roulette-container');
+var tc = document.querySelector('#tc');
 // Verifica se o jogo esta a decorrer
 let isSpinning = false;
 let flag_tentativas = false;
@@ -139,8 +140,9 @@ async function prepareGame() {
     
     // Check if it is challenge to change title
     if (!flag_gameOn) {
-        document.querySelector('#title1').innerHTML = "Spin for";
-        document.querySelector('#title2').innerHTML = "a challenge";
+        // document.querySelector('#title1').innerHTML = "Spin for";
+        // document.querySelector('#title2').innerHTML = "a challenge";
+        document.querySelector('.tc-section').style.display = "none";
         document.querySelector('.input-section').style.display = "none";
         document.querySelector('.premio-section').style.display = "none";
         document.querySelector('#btn').style.marginTop = "3rem";
@@ -198,6 +200,12 @@ async function rotateRoulette() {
 
         if (!isValidPhoneNumber(sanitizedNumber)) {
             displayModal("Aviso", "Número inválido!");
+            isSpinning = false;
+            return ;
+        }
+
+        if (!tcAccepted()) {
+            displayModal("Aviso", "Aceita os T&C para jogar!");
             isSpinning = false;
             return ;
         }
@@ -291,6 +299,7 @@ async function rotateRoulette() {
 // Some elements and its events
 const btn = document.getElementById("btn");
 btn.addEventListener('click', rotateRoulette);
+tc.addEventListener('click', () => { tc.classList.toggle('active'); });
 var modal = document.getElementById('modal');
 var confirmBtn = document.getElementById('confirmBtn');
 
@@ -301,7 +310,9 @@ function displayModal(title, message) {
 
         confirmBtn.onclick = function() {
             modal.style.display = "none";
-            if (title !== "Aviso") {
+            if (winnerSlices.includes(`s${selectedSliceIndex}`)) {
+                window.location.href = "http://localhost:5500/qrcode/index.html";
+            } else if (title !== 'Aviso') {
                 redirect();
             }
             resolve(false);
@@ -309,6 +320,10 @@ function displayModal(title, message) {
 
         modal.style.display = "block";
     });
+}
+
+function tcAccepted() {
+    return tc.classList.contains('active');
 }
 
 function isValidPhoneNumber(number) {
@@ -355,32 +370,30 @@ function getRandomAngle(min, max) {
 
 // Add to database
 
+/* ========================
 async function addToDatabase() {
 
-/* ========================
-
-// Add Roulette 
-
-// Roulette name
-let name = "teste";
-// Roulette slices
-await roletaGame.doc("slices").collection(name).doc("slices").set({
-    s1: ["Premio 1", 15, 2],
-    s2: ["Premio 2", 15, 2],
-    s3: ["Premio 3", 30, 3],
-    s4: ["Premio 4", 5, 1],
-    s5: ["Premio 5", 40, 3],
-    s6: ["Premio 6", 5, 1],
-    //...
-})
-
-// Roulette info
-await roletaGame.doc("slices").collection(name).doc("info").set({
-    specialSlice: "s4",
-    message: "",
-})
-
-
+    
+    // Add Roulette 
+    
+    // Roulette name
+    let name = "halloween";
+    // Roulette slices
+    await roletaGame.doc("slices").collection(name).doc("slices").set({
+        s1: ["Travessura", 15, 1],
+        s2: ["Upsss...", 45, 6],
+        s3: ["Douçura", 40, 5],
+        //...
+    })
+    
+    // Roulette info
+    await roletaGame.doc("slices").collection(name).doc("info").set({
+        specialSlice: "s1",
+        message: "Tira screenshot do QR Code que aparecer!",
+        winnerSlices: ["s1", "s3"],
+    })
+    
+    
 // Add brand 
 
 // brand name
@@ -389,12 +402,12 @@ await roletaGame.doc("brands").collection(brand).doc(brand).set({
     link: "https://visiond.pt",
     logo: "festivalDoCaloiro.png",
 })
-======================== */ 
 
 
 }
 
-// addToDatabase();
+addToDatabase();
 
+======================== */ 
 
 window.onload = prepareGame;

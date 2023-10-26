@@ -3,6 +3,13 @@
     src: url("../content/Lovelo-Black.ttf");
 }
 
+:root {
+    /* --primary: #8c52ff;
+    --secondary: #ffd04c; */
+    --primary: #f77607;
+    --secondary: #8c52ff;
+}
+
 body, html {
     width: 100%;
     height: 100%;
@@ -31,6 +38,37 @@ body, html {
     padding: 0;
 }
 
+
+#net {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10rem;
+}
+
+
+#spider {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10rem;
+}
+
+
+#net-two {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10rem;
+}
+
+#head {
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    width: 5rem;
+}
+
 .modal {
     display: none; 
     position: fixed; 
@@ -55,7 +93,7 @@ body, html {
     width: 16rem;
     height: 16rem;
     color: white;
-    background-color: #8c52ff;
+    background-color: var(--primary);
     border: 1px solid #888;
     padding: 20px;
     display: flex;
@@ -81,5 +119,27 @@ body, html {
 #confirmBtn:hover {
     cursor: pointer;
     background-color: white;
-    color: #8c52ff;
+    color: var(--primary);
+}
+
+@media (max-width: 400px) {
+    
+    #net {
+        width: 9rem;
+    }
+
+
+    #spider {
+        width: 7rem;
+    }
+
+
+    #net-two {
+        display: none;
+    }
+
+    #head {
+        width: 4rem;
+    }
+
 }

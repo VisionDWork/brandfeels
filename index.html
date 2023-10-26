@@ -16,6 +16,11 @@
 </head>
 <body>
 
+    <img src="./content/imgs/halloween1.png" alt="spider" id="spider">
+    <img src="./content/imgs/halloween2.png" alt="head" id="head">
+    <img src="./content/imgs/halloween3.png" alt="net" id="net">
+    <img src="./content/imgs/halloween4.png" alt="net" id="net-two">
+
     <div id="modal" class="modal">
         <div class="modal-content">
         <p id="modal-title"></p>
@@ -27,13 +32,13 @@
     <div id="logo-container">
         <img id="logo" src="./content/logos/brandfeels.png" alt="logo">
     </div>
-    <h1><span id="title1">SPIN TO</span><br><span id="title2">WIN REWARDS</span></h1>
+    <!-- <h1><span id="title1">SPIN TO</span><br><span id="title2">WIN REWARDS</span></h1> -->
     
     <div class="roleta-container">
         <div class="arrow"></div>
         <div class="roulette-container">
             <div class="middle-circle">
-                <img src="./content/logos/icon.png" alt="icon">
+                <img src="./content/logos/icon-orange.png" alt="icon">
             </div>
         </div>
     </div>
@@ -42,6 +47,11 @@
     <div class="input-section">
         <p><span>Preenche</span> abaixo e <span>concorre</span> a um dos nossos incríveis <span>prêmios</span>!</p>
         <input type="text" id="telefone" placeholder="Phone Number">
+    </div>
+
+    <div class="tc-section">
+        <div id="tc"><div></div></div>
+        <p onclick="window.location.replace('./content/T&C.pdf')">Termos e Condições</p>
     </div>
     
     <div class="premio-section">
@@ -53,10 +63,10 @@
     </div>
 
     <div id="instagram-container">
-        <img onclick="window.location.replace('https://instagram.com/brandfeels_?igshid=MWZjMTM2ODFkZg==')" id="instagram" src="./content/logos/instagram.png" alt="img">
+        <img onclick="window.location.replace('https://instagram.com/brandfeels_?igshid=MWZjMTM2ODFkZg==', '_blank')" id="instagram" src="./content/logos/instagram.png" alt="img">
     </div>
 
-    <p>Powered by <a href="https://visiond.pt">Vision D</a></p>
+    <p id="credits">Powered by <a href="https://visiond.pt">Vision D</a></p>
 
     <script src="./play/script.js"></script>
 </body>
