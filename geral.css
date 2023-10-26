@@ -52,6 +52,18 @@ body, html {
     top: 0;
     right: 0;
     width: 10rem;
+    transform: translateY(-100%);
+    animation: slide-down 1000ms forwards 200ms;
+}
+
+@keyframes slide-down {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
 }
 
 
@@ -67,6 +79,18 @@ body, html {
     bottom: 0;
     left: 1rem;
     width: 5rem;
+    transform: translateX(-100%);
+    animation: slide-right 1000ms forwards 200ms;
+}
+
+@keyframes slide-right {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
 }
 
 .modal {
