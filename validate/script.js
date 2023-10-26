@@ -48,10 +48,18 @@ async function validate() {
     });
 }
 
-async function getValues() {
+function getValues() {
     let params = new URLSearchParams(window.location.search);
     phoneNumber = params.get('phone');
     value = params.get('value');
+    if (!phoneNumber || !value || phoneNumber === "" || value === "") {
+        document.querySelector(".container button").style.color = "black";
+        document.querySelector(".container button").style.backgroundColor = "transparent";
+        document.querySelector(".container button").innerHTML = "Inválido.";
+        document.body.style.backgroundColor = "#ff3f3e";
+        btn.disabled = true;
+        return ;
+    }
     document.querySelector(".container h2").innerHTML = value;
 }
 

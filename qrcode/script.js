@@ -13,4 +13,5 @@ document.addEventListener('DOMContentLoaded', function() {
         colorLight : "#ffffff",
       }
     );
+    document.getElementById("qrcode-container").querySelector('h2').style.display = "none";
 });

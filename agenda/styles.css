@@ -14,23 +14,46 @@ h1 {
 #logo {
     width: 100%;
     margin-top: 3rem;
-    margin-bottom: 1rem;
     z-index: 10;
 }
 
-#qrcode-container {
+#agenda-container {
     width: 20rem;
-    height: 20rem;
-    border-radius: 25px;
-    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 2rem;
+    margin-block: 3rem;
+}
+
+#agenda-container div {
+    background: var(--primary); /* Light grey background */
+    text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    align-self: center;
+    justify-self: center;
+    cursor: pointer;
+    font-size: 1.4rem;
+    transition: all ease-in-out 200ms;
 }
 
-#qrcode-container h2 {
+#agenda-container div:hover {
+    background: var(--secondary); /* Darker grey background on mouse-over */
+}
+
+.agenda-text {
+    width: 20rem;
+    margin-bottom: 2rem;
+}
+
+.agenda-text span {
     color: var(--primary);
-    font-size: 1.2rem;
 }
 
 #instagram-container {
