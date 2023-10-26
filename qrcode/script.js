@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let phone = params.get('phone');
     let value = params.get('value');
     var qrcode = new QRCode(
-        document.getElementById("qrcode"), 
-        {
-          text: "https://thankful-glacier-0ba138310.4.azurestaticapps.net/validate/index.html?phone="+phone+"&value="+value,
-          colorDark : "#8c52ff",
-          colorLight : "#ffffff",
-        }
-      );
+      document.getElementById("qrcode"), 
+      {
+        text: "https://play.brandfeels.com/validate/index.html?phone="+phone+"&value="+value,
+        colorDark : "#8c52ff",
+        colorLight : "#ffffff",
+      }
+    );
 });

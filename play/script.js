@@ -309,11 +309,10 @@ function displayModal(title, message) {
     return new Promise((resolve, reject) => {
         modal.querySelector('#modal-title').textContent = title;
         modal.querySelector('#modal-text').textContent = message;
-
         confirmBtn.onclick = function() {
             modal.style.display = "none";
             if (winnerSlices.includes(`s${selectedSliceIndex}`)) {
-                window.location.href = "https://thankful-glacier-0ba138310.4.azurestaticapps.net/qrcode/index.html?phone=" + sanitizedNumber + "&value=" + prizeName;
+                window.location.href = "https://play.brandfeels.com/qrcode/index.html?phone=" + sanitizedNumber + "&value=" + prizeName;
             } else if (title !== 'Aviso') {
                 redirect();
             }
