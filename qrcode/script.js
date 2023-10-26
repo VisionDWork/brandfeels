@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let params = new URLSearchParams(window.location.search);
     let phone = params.get('phone');
     let value = params.get('value');
-    console.log(phone, value);
     var qrcode = new QRCode(
         document.getElementById("qrcode"), 
         {
