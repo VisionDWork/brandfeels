@@ -4,6 +4,7 @@ body {
 
 h1 {
     color: var(--primary);
+    margin-block: 5rem;
 }
 
 #logo-container {
@@ -15,6 +16,10 @@ h1 {
     width: 100%;
     margin-top: 3rem;
     z-index: 10;
+}
+
+#event-name {
+    color: var(--primary);
 }
 
 #agenda-container {

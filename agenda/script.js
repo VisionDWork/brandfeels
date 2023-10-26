@@ -55,12 +55,16 @@ function generateGrid(daysLeft) {
 
 
 async function getTimeAndCreateGrid() {
+  let eventName = "NEXT EVENT";
   await roletaGame.doc("stats").get().then((doc) => {
     nextGameDate = doc.data().nextGameDate;
+    eventName = doc.data().eventName;
   });
 
   const countDownDate = new Date(nextGameDate).getTime();
   const daysLeft = getTimeRemaining(countDownDate);
+  document.querySelector('#count-message').querySelector('span').textContent = daysLeft + 2;
+  document.querySelector('#event-name').textContent = eventName;
   generateGrid(daysLeft);
 }
 
