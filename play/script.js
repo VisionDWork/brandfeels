@@ -45,6 +45,8 @@ let prizeName = "";
 // Number of tries allowed per scan time
 let tries = 1;
 let minutesOfScanTime = 15;
+// Sanitized Number
+let sanitizedNumber = "";
 
 async function prepareGame() {
 
@@ -193,7 +195,7 @@ async function rotateRoulette() {
 
     if (flag_gameOn) {
         let phone = document.querySelector('#telefone').value;
-        let sanitizedNumber = phone.replace(/\s+/g, '');
+        sanitizedNumber = phone.replace(/\s+/g, '');
         if (sanitizedNumber.startsWith('+351')) {
             sanitizedNumber = sanitizedNumber.substring(4);
         }
