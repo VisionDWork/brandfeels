@@ -18,11 +18,14 @@ h1 {
     z-index: 10;
 }
 
-#qrcode {
+#qrcode-container {
     width: 20rem;
     height: 20rem;
     border-radius: 25px;
     background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #instagram-container {

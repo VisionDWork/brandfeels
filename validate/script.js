@@ -26,38 +26,30 @@ async function validate() {
 
     await roletaGame.doc("players").collection("playersPhones").doc(phoneNumber).get().then((ind) => {
         if (ind.data() == undefined) {
-            document.querySelector(".container button").innerHTML = "Jogador não foi encontrado";
+            document.querySelector(".container button").innerHTML = "Jogador não foi encontrado.";
             document.body.style.backgroundColor = "#ff3f3e";
             return ;
         }
         let plays = ind.data().plays;
         for (play in plays) {
-            if (plays[play][0] === value && plays[play][1] === false) {
-                plays[play][1] = true;
+            if (plays[play][0] === value && plays[play][1]) {
+                plays[play][1] = false;
                 roletaGame.doc("players").collection("playersPhones").doc(phoneNumber).update({
                     plays: plays,
                 });
-                document.querySelector(".container button").innerHTML = "Confirmado";
-                setTimeout(() => {window.location.href = "https://brandfeels.com"}, 3000); 
+                document.querySelector(".container button").innerHTML = "Confirmado!";
                 return ;
             }
         }
-        document.querySelector(".container button").innerHTML = "Já foi usado";
+        document.querySelector(".container button").innerHTML = "Prémio já foi reclamado.";
         document.body.style.backgroundColor = "#ff3f3e";
-        setTimeout(() => {window.location.href = "https://brandfeels.com"}, 3000); 
     });
 }
 
 async function getValues() {
-    let paramsObj = {};
-    // URL de Teste:
-    let url = window.location.href;
-    let parsedUrl = new URL(url);
-    for (let [key, value] of parsedUrl.searchParams.entries()) {
-        paramsObj[key] = value;
-    }
-    phoneNumber = paramsObj.number;
-    value = paramsObj.vale;
+    let params = new URLSearchParams(window.location.search);
+    phoneNumber = params.get('phone');
+    value = params.get('value');
     document.querySelector(".container h2").innerHTML = value;
 }
 

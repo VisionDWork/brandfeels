@@ -223,7 +223,7 @@ async function rotateRoulette() {
                 let plays = doc.data().plays;
                 let newPlays = {
                     ...plays,
-                    ['play' + (numberOfTries + 1).toString()]: [prizeName, false, readableDate] 
+                    ['play' + (numberOfTries + 1).toString()]: [prizeName, true, readableDate] 
                 };
                 
                 if ((agora - doc.data().firstTimePlayed) >= minutesOfScanTime*60) {
@@ -260,7 +260,7 @@ async function rotateRoulette() {
                     numberOfTries: 1,
                     numberOfPlays: 1,
                     firstTimePlayed: agora,
-                    plays: {play1: [prizeName, false, readableDate]},
+                    plays: {play1: [prizeName, true, readableDate]},
                 })
             }
         })
@@ -311,7 +311,7 @@ function displayModal(title, message) {
         confirmBtn.onclick = function() {
             modal.style.display = "none";
             if (winnerSlices.includes(`s${selectedSliceIndex}`)) {
-                window.location.href = "https://thankful-glacier-0ba138310.4.azurestaticapps.net/qrcode/index.html";
+                window.location.href = "https://thankful-glacier-0ba138310.4.azurestaticapps.net/qrcode/index.html?phone=" + sanitizedNumber + "&value=" + prizeName;
             } else if (title !== 'Aviso') {
                 redirect();
             }
