@@ -18,6 +18,7 @@ let flag_tentativas = false;
 // true: premios
 // false: desafios
 let flag_gameOn = false;
+let played = false;
 // Indica a rotacao da roleta
 let currentRotation = 0;
 // Qual e o premio
@@ -212,6 +213,8 @@ async function rotateRoulette() {
             return ;
         }
 
+        played = true;
+
         await roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).get().then(async (doc) => {
             const agora = Math.floor(Date.now()/1000);
             const date = new Date(agora * 1000);
@@ -311,7 +314,7 @@ function displayModal(title, message) {
         modal.querySelector('#modal-text').textContent = message;
         confirmBtn.onclick = function() {
             modal.style.display = "none";
-            if (winnerSlices.includes(`s${selectedSliceIndex}`)) {
+            if (played && winnerSlices.includes(`s${selectedSliceIndex}`)) {
                 window.location.href = "https://play.brandfeels.com/qrcode/index.html?phone=" + sanitizedNumber + "&value=" + prizeName;
             } else if (title !== 'Aviso') {
                 redirect();
