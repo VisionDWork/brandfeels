@@ -311,7 +311,7 @@ function displayModal(title, message) {
         confirmBtn.onclick = function() {
             modal.style.display = "none";
             if (winnerSlices.includes(`s${selectedSliceIndex}`)) {
-                window.location.href = "http://https://thankful-glacier-0ba138310.4.azurestaticapps.net/qrcode/index.html";
+                window.location.href = "https://thankful-glacier-0ba138310.4.azurestaticapps.net/qrcode/index.html";
             } else if (title !== 'Aviso') {
                 redirect();
             }
