@@ -38,11 +38,13 @@ async function validate() {
                     plays: plays,
                 });
                 document.querySelector(".container button").innerHTML = "Confirmado!";
+                setTimeout(() => {window.location.reload()}, 5000);
                 return ;
             }
         }
         document.querySelector(".container button").innerHTML = "Prémio já foi reclamado.";
         document.body.style.backgroundColor = "#ff3f3e";
+        setTimeout(() => {window.location.reload()}, 5000);
     });
 }
 
