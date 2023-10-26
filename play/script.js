@@ -213,6 +213,8 @@ async function rotateRoulette() {
             return ;
         }
 
+        // TODO: 2 factor authentication
+
         played = true;
 
         await roletaGame.doc("players").collection("playersPhones").doc(sanitizedNumber).get().then(async (doc) => {
