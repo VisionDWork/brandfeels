@@ -231,6 +231,19 @@ a:hover {
     width: 1rem;
 }
 
+#brand-link {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+#brand-link:hover {
+    text-decoration: underline;
+}
+
+#brand-link span {
+    color: var(--primary);
+}
+
 #credits {
     margin-bottom: 2rem;
 }

@@ -139,6 +139,7 @@ async function prepareGame() {
     await roletaGame.doc("brands").collection(brand_selected).doc(brand_selected).get().then((doc) => {
         redirectLink = doc.data().link;
         document.getElementById("logo").src = "./content/logos/" + doc.data().logo;
+        document.getElementById('brand-link').href = redirectLink;
     });
     
     // Check if it is challenge to change title
