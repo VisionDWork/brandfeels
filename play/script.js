@@ -247,12 +247,12 @@ async function rotateRoulette() {
                 }
                 // Caso ja tenha jogado x vezes
                 // Calculate the time left
-                const currentTime = new Date();
-                const lastPlayedTime = new Date(); // Set this to the time when you last played
-                const timeDifference = Math.floor((currentTime - lastPlayedTime) / (60 * 1000)); // in minutes
+                const currentTimee = new Date();
+                const lastPlayedTimee = new Date(); // Set this to the time when you last played
+                const timeDifferencee = Math.floor((currentTimee - lastPlayedTimee) / (60 * 1000)); // in minutes
                 
                 // Calculate the time left to play
-                const timeLeftToPlay = minutesOfScanTime - timeDifference;
+                const timeLeftToPlay = minutesOfScanTime - timeDifferencee;
                 if (numberOfTries >= tries){
                     flag_tentativas = true;
                     await displayModal("Aviso", `Espera ${timeLeftToPlay} minutos para jogares novamente!`);
