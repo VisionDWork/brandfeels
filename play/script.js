@@ -246,9 +246,17 @@ async function rotateRoulette() {
                     numberOfTries = 0;
                 }
                 // Caso ja tenha jogado x vezes
+                // Calculate the time left
+                const currentTime = new Date();
+                const lastPlayedTime = new Date(); // Set this to the time when you last played
+                const timeDifference = Math.floor((currentTime - lastPlayedTime) / (60 * 1000)); // in minutes
+                const minutesOfScanTime = 10; // Set the maximum allowed time in minutes
+                
+                // Calculate the time left to play
+                const timeLeftToPlay = minutesOfScanTime - timeDifference;
                 if (numberOfTries >= tries){
                     flag_tentativas = true;
-                    await displayModal("Aviso", `Espera ${minutesOfScanTime} minutos para jogares novamente!`);
+                    await displayModal("Aviso", `Espera ${timeLeftToPlay} minutos para jogares novamente!`);
                     isSpinning = false;
                     return ;
                 } 
