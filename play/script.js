@@ -250,7 +250,6 @@ async function rotateRoulette() {
                 const currentTime = new Date();
                 const lastPlayedTime = new Date(); // Set this to the time when you last played
                 const timeDifference = Math.floor((currentTime - lastPlayedTime) / (60 * 1000)); // in minutes
-                const minutesOfScanTime = 10; // Set the maximum allowed time in minutes
                 
                 // Calculate the time left to play
                 const timeLeftToPlay = minutesOfScanTime - timeDifference;
