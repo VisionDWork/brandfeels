@@ -48,6 +48,9 @@ let tries = 1;
 let minutesOfScanTime = 15;
 // Sanitized Number
 let sanitizedNumber = "";
+let links = {
+
+}
 
 async function prepareGame() {
 
@@ -137,9 +140,8 @@ async function prepareGame() {
 
     // Prepare Brand Logo and redirect link
     await roletaGame.doc("brands").collection(brand_selected).doc(brand_selected).get().then((doc) => {
-        redirectLink = doc.data().link;
         document.getElementById("logo").src = "./content/logos/" + doc.data().logo;
-        document.getElementById('brand-link').href = redirectLink;
+        document.getElementById('brand-link').href = doc.data().link;
     });
     
     // Check if it is challenge to change title
@@ -150,7 +152,7 @@ async function prepareGame() {
         document.querySelector('.input-section').style.display = "none";
         document.querySelector('.premio-section').style.display = "none";
         document.querySelector('#btn').style.marginTop = "3rem";
-    } 
+    }
 
     function getAccumulatedProbabilities(slices) {
         let accumulatedProbabilities = [];
@@ -158,6 +160,7 @@ async function prepareGame() {
         for (let i = 0; i != slicesLen; i++) {
             total += slices[`s${i+1}`][1];  // slices[i][1] is the probability percentage
             accumulatedProbabilities.push(total);
+            links[slices[`s${i+1}`][0]] = slices[`s${i+1}`][3];
         }
         return accumulatedProbabilities;
     }
@@ -318,7 +321,11 @@ function displayModal(title, message) {
         confirmBtn.onclick = function() {
             modal.style.display = "none";
             if (played && winnerSlices.includes(`s${selectedSliceIndex}`)) {
-                window.location.href = "https://play.brandfeels.com/qrcode/index.html?phone=" + sanitizedNumber + "&value=" + prizeName;
+                if (links[prizeName] === undefined) {
+                    window.location.href = "https://play.brandfeels.com/qrcode/index.html?phone=" + sanitizedNumber + "&value=" + prizeName;
+                } else {
+                    window.location.href = links[prizeName];
+                }
             } else if (title !== 'Aviso') {
                 redirect();
             }
