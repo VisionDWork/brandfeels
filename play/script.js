@@ -201,15 +201,7 @@ async function rotateRoulette() {
     if (flag_gameOn) {
         let phone = document.querySelector('#telefone').value;
         sanitizedNumber = phone.replace(/\s+/g, '');
-        if (sanitizedNumber.startsWith('+351')) {
-            sanitizedNumber = sanitizedNumber.substring(4);
-        }
-
-        if (!isValidPhoneNumber(sanitizedNumber)) {
-            displayModal("Aviso", "Número inválido!");
-            isSpinning = false;
-            return ;
-        }
+        
 
         if (!tcAccepted()) {
             displayModal("Aviso", "Aceita os T&C para jogar!");
